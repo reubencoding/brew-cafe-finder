@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diagnostic Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: #fff; }
+    .box { background: #333; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    .info { color: #60a5fa; }
+    button { padding: 10px 20px; cursor: pointer; margin: 5px; }
+    #log { background: #000; padding: 10px; font-family: monospace; height: 200px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h1>🔧 Diagnostic Tool</h1>
+  <div id="results"></div>
+  <div id="log"></div>
+  <button onclick="runTests()">Run Tests</button>
+  <button onclick="clearLog()">Clear Log</button>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const logEl = document.getElementById('log');
+    const resultsEl = document.getElementById('results');
+
+    function log(msg, type = 'info') {
+      const div = document.createElement('div');
+      div.className = type;
+      div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      logEl.appendChild(div);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function clearLog() {
+      logEl.innerHTML = '';
+      resultsEl.innerHTML = '';
+    }
+
+    async function runTests() {
+      clearLog();
+      resultsEl.innerHTML = '<div class="box">Running tests...</div>';
+
+      // Test 1: Firebase SDK loaded
+      log('Test 1: Checking Firebase SDK...');
+      if (typeof firebase === 'undefined') {
+        log('FAIL: Firebase SDK not loaded', 'error');
+        return;
+      }
+      log('PASS: Firebase SDK loaded', 'success');
+
+      // Test 2: Initialize Firebase
+      log('Test 2: Initializing Firebase...');
+      const firebaseConfig = {
+        apiKey: "AIzaSyCCE5D-s4osZN9J7dhesbI5CGWkPxSi0Tw",
+        authDomain: "cafe-5b867.firebaseapp.com",
+        projectId: "cafe-5b867",
+        storageBucket: "cafe-5b867.firebasestorage.app",
+        messagingSenderId: "922765379923",
+        appId: "1:922765379923:web:a1c362a9514eba941239a6",
+        measurementId: "G-R7K624GCEH"
+      };
+
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        log('PASS: Firebase initialized', 'success');
+      } catch (e) {
+        log(`FAIL: ${e.message}`, 'error');
+        return;
+      }
+
+      // Test 3: Auth service
+      log('Test 3: Checking Auth service...');
+      try {
+        const auth = firebase.auth();
+        log('PASS: Auth service available', 'success');
+      } catch (e) {
+        log(`FAIL: ${e.message}`, 'error');
+      }
+
+      // Test 4: Firestore service
+      log('Test 4: Checking Firestore service...');
+      try {
+        const db = firebase.firestore();
+        log('PASS: Firestore service available', 'success');
+      } catch (e) {
+        log(`FAIL: ${e.message}`, 'error');
+      }
+
+      // Test 5: Test Firestore read
+      log('Test 5: Testing Firestore read...');
+      try {
+        const db = firebase.firestore();
+        const snapshot = await db.collection('test').limit(1).get();
+        log('PASS: Firestore read works', 'success');
+      } catch (e) {
+        log(`FAIL: ${e.code} - ${e.message}`, 'error');
+        if (e.code === 'permission-denied') {
+          log('FIX: Go to Firebase Console > Firestore > Rules and allow read/write', 'info');
+        }
+        if (e.code === 'not-found') {
+          log('FIX: Firestore database not created. Go to Firebase Console > Firestore > Create database', 'info');
+        }
+      }
+
+      // Test 6: Test Firestore write
+      log('Test 6: Testing Firestore write...');
+      try {
+        const db = firebase.firestore();
+        await db.collection('test').doc('test').set({ test: true, timestamp: new Date() });
+        log('PASS: Firestore write works', 'success');
+      } catch (e) {
+        log(`FAIL: ${e.code} - ${e.message}`, 'error');
+      }
+
+      // Test 7: localStorage
+      log('Test 7: Checking localStorage...');
+      try {
+        localStorage.setItem('test', 'value');
+        const val = localStorage.getItem('test');
+        localStorage.removeItem('test');
+        if (val === 'value') {
+          log('PASS: localStorage works', 'success');
+        } else {
+          log('FAIL: localStorage not working', 'error');
+        }
+      } catch (e) {
+        log(`FAIL: ${e.message}`, 'error');
+      }
+
+      // Test 8: Check sampleCafes in localStorage
+      log('Test 8: Checking for cafes in localStorage...');
+      const cafes = localStorage.getItem('cafes');
+      if (cafes) {
+        const parsed = JSON.parse(cafes);
+        log(`PASS: Found ${parsed.length} cafes in localStorage`, 'success');
+      } else {
+        log('INFO: No cafes in localStorage (will be created on index.html load)', 'info');
+      }
+
+      log('Tests complete!', 'info');
+    }
+
+    // Auto-run on load
+    window.onload = runTests;
+  </script>
+</body>
+</html>

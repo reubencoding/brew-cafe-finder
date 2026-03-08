@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Café Details — BREW</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="bg-deco"></div>
+
+<!-- Header -->
+<header>
+  <a href="index.html" class="header-logo">
+    <div style="font-size:26px">☕</div>
+    <div>
+      <h1>BREW</h1>
+      <span>CHENNAI CAFÉS</span>
+    </div>
+  </a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link">Discover</a>
+    <a href="reviews.html" class="nav-link">Reviews</a>
+    <a href="bookings.html" class="nav-link">My Bookings</a>
+    <a href="favorites.html" class="nav-link">Favorites</a>
+  </nav>
+  <div class="header-right">
+    <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
+    <button class="signout-btn" onclick="signOut()">SIGN OUT</button>
+  </div>
+</header>
+
+<!-- Café Detail Content -->
+<div class="detail-container">
+  <div class="detail-loading" id="detail-loading">
+    <div class="spinner"></div>
+    <p>Loading café details...</p>
+  </div>
+
+  <div class="detail-content" id="detail-content" style="display:none;">
+    <!-- Hero Section -->
+    <div class="detail-hero" id="detail-hero">
+      <div class="detail-hero-content">
+        <div class="detail-emoji" id="detail-emoji">☕</div>
+        <h1 class="detail-name" id="detail-name"></h1>
+        <p class="detail-address" id="detail-address"></p>
+        <div class="detail-actions">
+          <button class="action-btn primary" onclick="openBookingModal()">
+            📅 Book a Table
+          </button>
+          <button class="action-btn" id="favorite-btn" onclick="toggleFavorite()">
+            🤍 Add to Favorites
+          </button>
+          <button class="action-btn" onclick="shareCafe()">
+            📤 Share
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Grid -->
+    <div class="detail-grid">
+      <div class="detail-main">
+        <!-- Quick Stats -->
+        <div class="detail-stats" id="detail-stats"></div>
+
+        <!-- About -->
+        <div class="detail-section">
+          <h3>About</h3>
+          <p class="detail-description" id="detail-description"></p>
+          <div class="detail-tags" id="detail-tags"></div>
+        </div>
+
+        <!-- Menu Preview -->
+        <div class="detail-section">
+          <h3>Popular Items</h3>
+          <div class="menu-items" id="menu-items"></div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="detail-section">
+          <div class="reviews-header">
+            <h3>Reviews</h3>
+            <button class="brew-btn small" onclick="openReviewModal()">Write a Review</button>
+          </div>
+          <div class="reviews-list" id="reviews-list"></div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="detail-sidebar">
+        <div class="sidebar-card">
+          <h4>Hours</h4>
+          <p id="sidebar-hours"></p>
+        </div>
+        <div class="sidebar-card">
+          <h4>Contact</h4>
+          <p id="sidebar-phone"></p>
+          <button class="contact-btn" onclick="callCafe()">📞 Call Now</button>
+        </div>
+        <div class="sidebar-card">
+          <h4>Location</h4>
+          <div class="map-placeholder" id="map-container">
+            <p>🗺️ Map View</p>
+            <small>Interactive map coming soon</small>
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <h4>Amenities</h4>
+          <ul class="amenities-list" id="amenities-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Not Found -->
+  <div class="detail-not-found" id="detail-not-found" style="display:none;">
+    <div class="cup">☕</div>
+    <h2>Café Not Found</h2>
+    <p>The café you're looking for doesn't exist.</p>
+    <a href="index.html" class="brew-btn">Back to Discover</a>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div id="booking-modal" class="modal-overlay" onclick="closeBookingModal(event)">
+  <div class="modal-box booking-modal-box">
+    <button class="modal-close" onclick="closeBookingModalBtn()">✕</button>
+    <h2>Book a Table</h2>
+    <p class="modal-subtitle" id="booking-cafe-name"></p>
+    <form id="booking-form" onsubmit="submitBooking(event)">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="booking-date" required />
+      </div>
+      <div class="form-group">
+        <label>Time</label>
+        <select id="booking-time" required></select>
+      </div>
+      <div class="form-group">
+        <label>Guests</label>
+        <select id="booking-guests" required>
+          <option value="1">1 Guest</option>
+          <option value="2" selected>2 Guests</option>
+          <option value="3">3 Guests</option>
+          <option value="4">4 Guests</option>
+          <option value="5">5 Guests</option>
+          <option value="6">6 Guests</option>
+          <option value="7">7+ Guests</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Special Requests</label>
+        <textarea id="booking-notes" placeholder="Any special requests..."></textarea>
+      </div>
+      <button type="submit" class="brew-btn">Confirm Booking</button>
+    </form>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div id="review-modal" class="modal-overlay" onclick="closeReviewModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeReviewModalBtn()">✕</button>
+    <h2>Write a Review</h2>
+    <form id="review-form" onsubmit="submitReview(event)">
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="star-rating" id="star-rating">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <input type="hidden" id="review-rating" value="5" />
+      </div>
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea id="review-text" required placeholder="Share your experience..."></textarea>
+      </div>
+      <button type="submit" class="brew-btn">Post Review</button>
+    </form>
+  </div>
+</div>
+
+<script src="firebase-compat-config.js"></script>
+<script src="cafe-data.js"></script>
+<script src="cafe-detail.js"></script>
+</body>
+</html>

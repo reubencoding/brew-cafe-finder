@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BREW - Firebase Setup Helper</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #1A0F0A;
+      color: #F5E6D3;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo .cup {
+      font-size: 52px;
+      margin-bottom: 8px;
+    }
+
+    .logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      color: #C8853A;
+      letter-spacing: 4px;
+    }
+
+    .logo p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: rgba(245,230,211,0.45);
+      font-size: 13px;
+      letter-spacing: 4px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(60,36,21,0.88), rgba(26,15,10,0.96));
+      border: 1px solid rgba(200,133,58,0.25);
+      border-radius: 20px;
+      padding: 32px;
+    }
+
+    .step {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(200,133,58,0.1);
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #C8853A, #8B4513);
+      color: #FFF8F0;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-right: 12px;
+    }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #F5E6D3;
+      display: inline-block;
+    }
+
+    .step-content {
+      margin-top: 12px;
+      margin-left: 40px;
+    }
+
+    .step-content p {
+      font-size: 14px;
+      color: rgba(245,230,211,0.6);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .step-content a {
+      color: #C8853A;
+      text-decoration: underline;
+    }
+
+    .config-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(200,133,58,0.3);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .config-box textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #F5E6D3;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      resize: vertical;
+      min-height: 200px;
+      outline: none;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #C8853A, #8B4513);
+      color: #FFF8F0;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 16px;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(200,133,58,0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .success {
+      color: #2ECC71;
+    }
+
+    .error {
+      color: #E05C5C;
+    }
+
+    #status {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    #status.show {
+      display: block;
+    }
+
+    .tip {
+      background: rgba(200,133,58,0.1);
+      border-left: 3px solid #C8853A;
+      padding: 12px 16px;
+      margin-top: 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 13px;
+      color: rgba(245,230,211,0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <div class="cup">☕</div>
+      <h1>BREW</h1>
+      <p>Firebase Setup Helper</p>
+    </div>
+
+    <div class="card">
+      <div class="step">
+        <span class="step-number">1</span>
+        <span class="step-title">Create Firebase Project</span>
+        <div class="step-content">
+          <p>Go to <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and create a new project.</p>
+          <div class="tip">
+            💡 Disable Google Analytics for simplicity, or enable it if you want analytics.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">2</span>
+        <span class="step-title">Add Web App</span>
+        <div class="step-content">
+          <p>Click the <strong>&lt;/&gt;</strong> icon to add a web app, then copy your Firebase config:</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">3</span>
+        <span class="step-title">Paste Your Config</span>
+        <div class="step-content">
+          <div class="config-box">
+            <textarea id="config-input" placeholder="Paste your Firebase config here (the JavaScript object with apiKey, authDomain, etc.)..."></textarea>
+          </div>
+          <button class="btn" onclick="updateConfig()">Update firebase-config.js</button>
+          <div id="status"></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">4</span>
+        <span class="step-title">Enable Services</span>
+        <div class="step-content">
+          <p><strong>Authentication:</strong> Enable Email/Password and Google sign-in</p>
+          <p><strong>Firestore:</strong> Create database in "test mode" for 30 days</p>
+          <div class="tip">
+            📄 See README.md for detailed security rules to copy-paste.
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <span class="step-number">5</span>
+        <span class="step-title">Done!</span>
+        <div class="step-content">
+          <p>Open <a href="auth.html">auth.html</a> to start using the app! ☕</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Pre-fill with the provided config
+    const PROVIDED_CONFIG = {
+      apiKey: "AIzaSyCCE5D-s4osZN9J7dhesbI5CGWkPxSi0Tw",
+      authDomain: "cafe-5b867.firebaseapp.com",
+      projectId: "cafe-5b867",
+      storageBucket: "cafe-5b867.firebasestorage.app",
+      messagingSenderId: "922765379923",
+      appId: "1:922765379923:web:a1c362a9514eba941239a6",
+      measurementId: "G-R7K624GCEH"
+    };
+
+    // Auto-fill the textarea on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const textarea = document.getElementById('config-input');
+      textarea.value = `const firebaseConfig = ${JSON.stringify(PROVIDED_CONFIG, null, 2)};`;
+    });
+
+    async function updateConfig() {
+      const input = document.getElementById('config-input').value.trim();
+      const status = document.getElementById('status');
+      const btn = document.querySelector('.btn');
+
+      if (!input) {
+        status.className = 'error';
+        status.textContent = 'Please paste your Firebase config first';
+        status.classList.add('show');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Updating...';
+
+      // Parse the config
+      let config;
+      try {
+        // Try to extract JSON from the pasted text
+        const jsonMatch = input.match(/\{[\s\S]*?\}/);
+        if (jsonMatch) {
+          config = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('No valid JSON found');
+        }
+
+        // Validate required fields
+        const required = ['apiKey', 'authDomain', 'projectId', 'appId'];
+        const missing = required.filter(key => !config[key]);
+
+        if (missing.length > 0) {
+          throw new Error(`Missing fields: ${missing.join(', ')}`);
+        }
+      } catch (err) {
+        status.className = 'error';
+        status.textContent = 'Invalid config format. Please copy the entire config object from Firebase.';
+        status.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Update firebase-config.js';
+        return;
+      }
+
+      // Create new config file content
+      const configContent = `// Firebase Configuration
+// Generated automatically by setup.html
+
+const firebaseConfig = ${JSON.stringify(config, null, 2)};
+
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+// Export for use in other files
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Enable offline persistence
+db.enablePersistence({
+  synchronizeTabs: true
+}).catch((err) => {
+  if (err.code === 'failed-precondition') {
+    console.log('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+  } else if (err.code === 'unimplemented') {
+    console.log('The current browser does not support persistence.');
+  }
+});
+
+console.log('Firebase initialized');
+`;
+
+      // Try to save (this won't work due to browser security, so we download it)
+      const blob = new Blob([configContent], { type: 'text/javascript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'firebase-compat-config.js';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      status.className = 'success';
+      status.innerHTML = `
+        ✅ Config file downloaded! Replace the existing firebase-compat-config.js with the downloaded file.
+        <br><br>
+        <strong>Next Steps:</strong>
+        <ol style="text-align:left;margin-top:12px;">
+          <li>Replace firebase-compat-config.js with the downloaded file</li>
+          <li>Go to Firebase Console &gt; Authentication &gt; Enable Email/Password and Google</li>
+          <li>Go to Firestore Database &gt; Create database in test mode</li>
+          <li>Open auth.html to start using the app!</li>
+        </ol>
+      `;
+      status.classList.add('show');
+
+      btn.disabled = false;
+      btn.textContent = 'Update firebase-config.js';
+    }
+  </script>
+</body>
+</html>

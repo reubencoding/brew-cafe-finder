@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reviews — BREW</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="bg-deco"></div>
+
+<!-- Header -->
+<header>
+  <a href="index.html" class="header-logo">
+    <div style="font-size:26px">☕</div>
+    <div>
+      <h1>BREW</h1>
+      <span>CHENNAI CAFÉS</span>
+    </div>
+  </a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link">Discover</a>
+    <a href="reviews.html" class="nav-link active">Reviews</a>
+    <a href="bookings.html" class="nav-link">My Bookings</a>
+    <a href="favorites.html" class="nav-link">Favorites</a>
+  </nav>
+  <div class="header-right">
+    <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
+    <button class="signout-btn" onclick="signOut()">SIGN OUT</button>
+  </div>
+</header>
+
+<!-- Reviews Content -->
+<div class="page-container">
+  <div class="page-header">
+    <h2>Community Reviews</h2>
+    <p>See what others are saying about Chennai's cafés</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="reviews-stats" id="reviews-stats">
+    <div class="stat-card">
+      <div class="stat-number" id="total-reviews">-</div>
+      <div class="stat-label">Total Reviews</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="avg-rating">-</div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="top-cafe">-</div>
+      <div class="stat-label">Most Reviewed</div>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <select class="filter-select" id="cafe-filter" onchange="filterReviews()">
+      <option value="">All Cafés</option>
+    </select>
+    <select class="filter-select" id="sort-filter" onchange="sortReviews()">
+      <option value="newest">Newest First</option>
+      <option value="highest">Highest Rated</option>
+      <option value="lowest">Lowest Rated</option>
+    </select>
+  </div>
+
+  <!-- Reviews Grid -->
+  <div class="reviews-grid" id="reviews-grid">
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading reviews...</p>
+    </div>
+  </div>
+
+  <!-- Load More -->
+  <div class="load-more" id="load-more" style="display:none;">
+    <button class="action-btn" onclick="loadMoreReviews()">Load More</button>
+  </div>
+</div>
+
+<script src="firebase-compat-config.js"></script>
+<script src="reviews.js"></script>
+</body>
+</html>

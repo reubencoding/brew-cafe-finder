@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bookings — BREW</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="bg-deco"></div>
+
+<!-- Header -->
+<header>
+  <a href="index.html" class="header-logo">
+    <div style="font-size:26px">☕</div>
+    <div>
+      <h1>BREW</h1>
+      <span>CHENNAI CAFÉS</span>
+    </div>
+  </a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link">Discover</a>
+    <a href="reviews.html" class="nav-link">Reviews</a>
+    <a href="bookings.html" class="nav-link active">My Bookings</a>
+    <a href="favorites.html" class="nav-link">Favorites</a>
+  </nav>
+  <div class="header-right">
+    <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
+    <button class="signout-btn" onclick="signOut()">SIGN OUT</button>
+  </div>
+</header>
+
+<!-- Bookings Content -->
+<div class="page-container">
+  <div class="page-header">
+    <h2>My Bookings</h2>
+    <p>Manage your café reservations</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('upcoming')">Upcoming</button>
+    <button class="tab-btn" onclick="switchTab('past')">Past</button>
+    <button class="tab-btn" onclick="switchTab('cancelled')">Cancelled</button>
+  </div>
+
+  <!-- Bookings List -->
+  <div class="bookings-container" id="bookings-container">
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your bookings...</p>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" id="empty-state" style="display:none;">
+    <div class="cup">📅</div>
+    <h3>No bookings yet</h3>
+    <p>Start exploring cafés and book your table</p>
+    <a href="index.html" class="brew-btn">Discover Cafés</a>
+  </div>
+</div>
+
+<!-- Cancel Confirmation Modal -->
+<div id="cancel-modal" class="modal-overlay" onclick="closeCancelModal(event)">
+  <div class="modal-box">
+    <h3>Cancel Booking?</h3>
+    <p>Are you sure you want to cancel this reservation?</p>
+    <div class="modal-actions">
+      <button class="action-btn" onclick="closeCancelModalBtn()">Keep Booking</button>
+      <button class="action-btn danger" onclick="confirmCancel()">Yes, Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="firebase-compat-config.js"></script>
+<script src="bookings.js"></script>
+</body>
+</html>

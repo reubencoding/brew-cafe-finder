@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BREW — Chennai's Café Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Firebase SDK (Compat version for easier integration) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="bg-deco"></div>
+
+<!-- Header -->
+<header>
+  <a href="index.html" class="header-logo">
+    <div style="font-size:26px">☕</div>
+    <div>
+      <h1>BREW</h1>
+      <span>CHENNAI CAFÉS</span>
+    </div>
+  </a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link active">Discover</a>
+    <a href="reviews.html" class="nav-link">Reviews</a>
+    <a href="bookings.html" class="nav-link">My Bookings</a>
+    <a href="favorites.html" class="nav-link">Favorites</a>
+  </nav>
+  <div class="header-right">
+    <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
+    <button class="signout-btn" onclick="signOut()">SIGN OUT</button>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <p class="eyebrow">EXPLORE</p>
+  <h2>Chennai's Finest <span>Coffee Haunts</span></h2>
+  <p id="hero-sub">Discover handpicked cafés, from serene garden retreats to specialty roasteries</p>
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <input class="search-box" type="text" placeholder="🔍  Search cafés, areas, vibes..." id="search-input" oninput="filterCafes()" />
+  <div class="filter-row">
+    <div class="area-pills" id="area-pills"></div>
+    <select class="sort-select" id="sort-select" onchange="sortCafes()">
+      <option value="rating">Sort by Rating</option>
+      <option value="reviews">Most Reviewed</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+      <option value="name">Name A-Z</option>
+    </select>
+  </div>
+  <p class="result-count" id="result-count"></p>
+</div>
+
+<!-- Grid -->
+<div class="grid" id="cafe-grid">
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading cafés...</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-box" id="modal-box">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script src="firebase-compat-config.js"></script>
+<script src="cafe-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
