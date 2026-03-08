@@ -4,6 +4,7 @@ let currentUser = null;
 let currentTab = 'upcoming';
 let bookings = [];
 let bookingToCancel = null;
+let fallbackTimer = null;
 
 // Ensure no modal is left open on page load
 document.getElementById('cancel-modal')?.classList.remove('open');
@@ -28,14 +29,52 @@ auth.onAuthStateChanged((user) => {
 });
 
 // Load bookings
+function showErrorState(message) {
+  const container = document.getElementById('bookings-container');
+  container.innerHTML = `
+    <div class="empty-state">
+      <div class="cup">⚠️</div>
+      <h3>Unable to load bookings</h3>
+      <p>${message}</p>
+      <button class="brew-btn" onclick="loadBookings()">Retry</button>
+    </div>
+  `;
+}
+
 async function loadBookings() {
+  // Clear any existing fallback timer
+  if (fallbackTimer) {
+    clearTimeout(fallbackTimer);
+    fallbackTimer = null;
+  }
+
   if (!currentUser) return;
 
+  // Check Firebase availability
+  if (typeof db === 'undefined' || db === null) {
+    showErrorState('Firebase is not available. Please check your connection.');
+    return;
+  }
+
+  // Show loading state
+  const container = document.getElementById('bookings-container');
+  container.innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your bookings...</p>
+    </div>
+  `;
+
   try {
-    // Get bookings without server-side ordering to avoid composite index requirement
-    const snapshot = await db.collection('bookings')
+    // Wrap query in 15-second timeout
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('QUERY_TIMEOUT')), 15000)
+    );
+    const queryPromise = db.collection('bookings')
       .where('userId', '==', currentUser.uid)
       .get();
+
+    const snapshot = await Promise.race([queryPromise, timeoutPromise]);
 
     bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
@@ -49,14 +88,11 @@ async function loadBookings() {
     filterAndRenderBookings();
   } catch (err) {
     console.error('Error loading bookings:', err);
-    alert('Failed to load bookings: ' + err.message);
-    document.getElementById('bookings-container').innerHTML = `
-      <div class="empty-state">
-        <div class="cup">📅</div>
-        <h3>Unable to load bookings</h3>
-        <p>Please try again later</p>
-      </div>
-    `;
+    if (err.message === 'QUERY_TIMEOUT') {
+      showErrorState('Request timed out after 15 seconds. Please check your connection and try again.');
+    } else {
+      showErrorState('Failed to load bookings: ' + err.message);
+    }
   }
 }
 
@@ -202,3 +238,12 @@ function signOut() {
     window.location.href = 'auth.html';
   });
 }
+
+// Global fallback timer: if loading persists after 20 seconds, show error
+setTimeout(() => {
+  const container = document.getElementById('bookings-container');
+  const loadingState = container?.querySelector('.loading-state');
+  if (loadingState) {
+    showErrorState('Loading is taking too long. Please refresh the page or try again.');
+  }
+}, 20000);
