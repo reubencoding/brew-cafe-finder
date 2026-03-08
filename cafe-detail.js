@@ -83,11 +83,19 @@ function renderCafeDetail() {
   const nameEl = document.getElementById('detail-name');
   const addressEl = document.getElementById('detail-address');
   const bookingCafeNameEl = document.getElementById('booking-cafe-name');
+  const imageEl = document.getElementById('detail-image');
 
   if (emojiEl) emojiEl.textContent = c.emoji;
   if (nameEl) nameEl.textContent = c.name;
   if (addressEl) addressEl.textContent = '📍 ' + c.address;
   if (bookingCafeNameEl) bookingCafeNameEl.textContent = c.name;
+  if (imageEl) {
+    if (c.imagePath) {
+      imageEl.src = c.imagePath;
+    } else {
+      imageEl.style.display = 'none';
+    }
+  }
 
   // Stats - updated to show user's fields
   const statsEl = document.getElementById('detail-stats');

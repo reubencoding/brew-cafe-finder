@@ -19,6 +19,7 @@ const sampleCafes = [
     description: 'India\'s largest coffee chain serving a variety of coffees, snacks, and light meals in a casual setting.',
     emoji: '☕',
     color: '#009639',
+    imagePath: '/images/cafe_001.jpg',
     menu: [
       {name: 'Cappuccino', price: '₹180'},
       {name: 'Chocolate Brownie', price: '₹120'},
@@ -43,6 +44,7 @@ const sampleCafes = [
     description: 'Global coffeehouse chain offering premium Arabica coffees, teas, and signature beverages in a modern, comfortable environment.',
     emoji: '☕',
     color: '#00704A',
+    imagePath: '/images/cafe_002.jpg',
     menu: [
       {name: 'Caffe Latte', price: '₹250'},
       {name: 'Java Chip Frappuccino', price: '₹320'},
@@ -67,6 +69,7 @@ const sampleCafes = [
     description: 'Traditional South Indian café famous for authentic filter coffee, idli, dosa, and other breakfast specialties. A slice of Chennai\'s coffee culture.',
     emoji: '🍵',
     color: '#8B4513',
+    imagePath: '/images/cafe_003.jpg',
     menu: [
       {name: 'Filter Coffee', price: '₹40'},
       {name: 'Masala Dosa', price: '₹80'},
@@ -91,6 +94,7 @@ const sampleCafes = [
     description: 'Charming tea room with an extensive collection of teas from around the world, alongside delicious baked goods and light meals in a serene garden setting.',
     emoji: '🍵',
     color: '#2E8B57',
+    imagePath: '/images/cafe_004.jpg',
     menu: [
       {name: 'Earl Grey Tea', price: '₹150'},
       {name: 'Masala Chai', price: '₹80'},
@@ -115,6 +119,7 @@ const sampleCafes = [
     description: 'European-style café known for its rustic ambiance, freshly baked pastries, sandwiches, and all-day breakfast options. Popular among expats and locals alike.',
     emoji: '🥐',
     color: '#D2691E',
+    imagePath: '/images/cafe_005.jpg',
     menu: [
       {name: 'Croissant', price: '₹120'},
       {name: 'Eggs Benedict', price: '₹350'},
@@ -139,6 +144,7 @@ const sampleCafes = [
     description: 'Popular chai chain serving a variety of teas and chai variants along with snacks and light bites. Known for quick service and reasonable prices.',
     emoji: '☕',
     color: '#CD853F',
+    imagePath: '/images/cafe_006.jpg',
     menu: [
       {name: 'Masala Chai', price: '₹30'},
       {name: 'Ginger Lemon Tea', price: '₹40'},
@@ -163,6 +169,7 @@ const sampleCafes = [
     description: 'Specialty waffle café offering thick Belgian waffles with a variety of toppings, ice creams, and sauces. A dessert lover\'s paradise.',
     emoji: '🧇',
     color: '#F5DEB3',
+    imagePath: '/images/cafe_007.jpg',
     menu: [
       {name: 'Classic Belgian Waffle', price: '₹220'},
       {name: 'Chocolate Overload Waffle', price: '₹280'},
@@ -187,6 +194,7 @@ const sampleCafes = [
     description: 'Chennai\'s iconic bakery and café established in 1948. Famous for its cakes, pastries, and savouries. A beloved local institution with a rich heritage.',
     emoji: '🎂',
     color: '#FFD700',
+    imagePath: '/images/cafe_008.jpg',
     menu: [
       {name: 'Black Forest Cake', price: '₹180'},
       {name: 'Chocolate Éclair', price: '₹90'},
@@ -211,6 +219,7 @@ const sampleCafes = [
     description: 'Popular café serving delicious breakfast, biryani, and coffee in a cozy, modern setting. Famous for its all-day breakfast and weekend crowds.',
     emoji: '🍳',
     color: '#FF6347',
+    imagePath: '/images/cafe_009.jpg',
     menu: [
       {name: 'English Breakfast', price: '₹320'},
       {name: 'Chicken Biryani', price: '₹280'},
@@ -235,6 +244,7 @@ const sampleCafes = [
     description: 'Artisan bakery and café offering freshly baked breads, pastries, cakes, and sandwiches. Known for quality ingredients and creative flavors.',
     emoji: '🥖',
     color: '#DEB887',
+    imagePath: '/images/cafe_010.jpg',
     menu: [
       {name: 'Croissant', price: '₹80'},
       {name: 'Sourdough Bread', price: '₹120'},
@@ -259,6 +269,7 @@ const sampleCafes = [
     description: 'Intimate specialty coffee shop focusing on single-origin beans, pour-overs, and latte art. Perfect for coffee connoisseurs seeking a quiet retreat.',
     emoji: '🎯',
     color: '#2F4F4F',
+    imagePath: '/images/cafe_011.jpg',
     menu: [
       {name: 'Pour Over Coffee', price: '₹200'},
       {name: 'Flat White', price: '₹180'},
@@ -283,6 +294,7 @@ const sampleCafes = [
     description: 'European-style café serving Italian pastas, sandwiches, and coffee. Features both indoor and outdoor seating with a relaxed, casual vibe.',
     emoji: '🍝',
     color: '#DAA520',
+    imagePath: '/images/cafe_012.jpg',
     menu: [
       {name: 'Spaghetti Carbonara', price: '₹320'},
       {name: 'Margherita Pizza', price: '₹380'},
@@ -307,6 +319,7 @@ const sampleCafes = [
     description: 'A clean, light-filled café perfect for working, reading, or enjoying art. Known for their excellent matcha and cozy atmosphere with plenty of charging points.',
     emoji: '☕',
     color: '#4CAF50',
+    imagePath: '/images/cafe_013.jpg',
     menu: [
       {name: 'Matcha Latte', price: '₹180'},
       {name: 'Latte', price: '₹150'},
@@ -331,6 +344,7 @@ const sampleCafes = [
     description: 'A peaceful café with a beautiful sunlit roof, perfect for creative work. Their desserts and coffee are highly recommended despite the food having mixed reviews.',
     emoji: '🌞',
     color: '#FF9800',
+    imagePath: '/images/cafe_014.jpg',
     menu: [
       {name: 'Cold Coffee', price: '₹180'},
       {name: 'Chocolate Brownie', price: '₹150'},
@@ -355,6 +369,7 @@ const sampleCafes = [
     description: 'An isolated and peaceful space with a pretty ambiance. Ideal for focused work and creative tasks. Food is satisfactory and complements the experience.',
     emoji: '🎨',
     color: '#9C27B0',
+    imagePath: '/images/cafe_015.jpg',
     menu: [
       {name: 'Cappuccino', price: '₹180'},
       {name: 'Salad', price: '₹250'},
@@ -379,6 +394,7 @@ const sampleCafes = [
     description: 'A great workplace with a peaceful atmosphere. Features an exciting new menu from Maison Indulgence. A favorite for those who love everything about this spot.',
     emoji: '🍰',
     color: '#E91E63',
+    imagePath: '/images/cafe_016.jpg',
     menu: [
       {name: 'Gelato', price: '₹200'},
       {name: 'Coffee', price: '₹150'},
@@ -403,6 +419,7 @@ const sampleCafes = [
     description: 'Perfect for working with a variety of good food options. Famous for their Bounty ice cream that keeps customers coming back.',
     emoji: '🍦',
     color: '#FFEB3B',
+    imagePath: '/images/cafe_017.jpg',
     menu: [
       {name: 'Bounty Ice Cream', price: '₹180'},
       {name: 'Coffee', price: '₹150'},
@@ -427,6 +444,7 @@ const sampleCafes = [
     description: 'A calm place suitable for work, art, and reading. Food is good though some find it a bit pricey. Multiple locations for convenience.',
     emoji: '📚',
     color: '#3F51B5',
+    imagePath: '/images/cafe_018.jpg',
     menu: [
       {name: 'Latte', price: '₹200'},
       {name: 'Salad', price: '₹350'},
@@ -451,6 +469,7 @@ const sampleCafes = [
     description: 'Stunning lake views (10/10) make this a perfect spot for reading, art, or work. The food is decent but the views and calming ambiance keep customers returning regularly.',
     emoji: '🏞️',
     color: '#00BCD4',
+    imagePath: '/images/cafe_019.jpg',
     menu: [
       {name: 'Coffee', price: '₹150'},
       {name: 'Sandwich', price: '₹200'},

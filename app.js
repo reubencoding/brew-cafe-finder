@@ -129,6 +129,9 @@ function renderGrid(list) {
 
   grid.innerHTML = list.map(c => `
     <div class="cafe-card" onclick="openCafeDetail('${c.docId}')">
+      <div class="cafe-card-image">
+        <img src="${c.imagePath || '/images/placeholder.jpg'}" alt="${c.name}" onerror="this.style.display='none'">
+      </div>
       <div class="card-top">
         <div class="card-icon" style="background:${c.color}40; border: 1.5px solid ${c.color}60">${c.emoji}</div>
         <div class="card-rating">
@@ -137,7 +140,7 @@ function renderGrid(list) {
         </div>
       </div>
       <h3 class="card-name">${c.name}</h3>
-      <p class="card-meta">📍 ${c.location} · ${c.price} · ${c.tables} tables</p>
+      <p class="card-meta">📍 ${c.location} · ${c.price}</p>
       <p class="card-desc">${c.description}</p>
       <div class="tags">${c.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
       <div class="card-footer">
