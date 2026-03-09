@@ -1,9 +1,9 @@
 // Cafe Detail Page Logic
 
+// Using global currentUser from auth.js - do not redeclare
 let currentCafe = null;
 let currentDocId = null;
 let isFavorite = false;
-let currentUser = null;
 
 // Helper: Wrap promises with 15-second timeout
 function withTimeout(promise, timeout = 15000) {

@@ -1,7 +1,6 @@
 // Bookings Page Logic
 
-// Wait for auth state to be ready
-let currentUser = null;
+// Using global currentUser from auth.js - do not redeclare
 let currentTab = 'upcoming';
 let bookings = [];
 let bookingToCancel = null;

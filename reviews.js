@@ -1,6 +1,6 @@
 // Reviews Page Logic
 
-let currentUser = null;
+// Using global currentUser from auth.js - do not redeclare
 let reviews = [];
 let cafes = [];
 let currentFilter = '';

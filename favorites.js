@@ -1,6 +1,6 @@
 // Favorites Page Logic
 
-let currentUser = null;
+// Using global currentUser from auth.js - do not redeclare
 let favorites = [];
 let fallbackTimer = null;
 
