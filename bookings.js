@@ -1,6 +1,7 @@
 // Bookings Page Logic
 
-let currentUser = null; // Will be set by auth state listener
+// Wait for auth state to be ready
+let currentUser = null;
 let currentTab = 'upcoming';
 let bookings = [];
 let bookingToCancel = null;

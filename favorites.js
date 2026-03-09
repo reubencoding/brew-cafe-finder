@@ -1,7 +1,8 @@
 // Favorites Page Logic
 
-// Auth state provided by auth.js
+let currentUser = null;
 let favorites = [];
+let fallbackTimer = null;
 
 // Helper: Wrap promises with 15-second timeout
 function withTimeout(promise, timeout = 15000) {
@@ -34,9 +35,39 @@ auth.onAuthStateChanged((user) => {
 
 // Load favorites
 async function loadFavorites() {
-  if (!currentUser) return;
+  if (!currentUser) {
+    // Should not happen normally, but ensure UI consistency
+    const grid = document.getElementById('favorites-grid');
+    if (grid) {
+      grid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
+          <div class="cup">🔒</div>
+          <h3>Please sign in</h3>
+          <p>Sign in to view your favorites</p>
+          <a href="auth.html" class="brew-btn">Sign In</a>
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // Clear any existing fallback timer
+  if (fallbackTimer) {
+    clearTimeout(fallbackTimer);
+    fallbackTimer = null;
+  }
 
   try {
+    // Set fallback timer: if loading persists after 20 seconds, show error
+    fallbackTimer = setTimeout(() => {
+      const grid = document.getElementById('favorites-grid');
+      const loadingState = grid?.querySelector('.loading-state');
+      if (loadingState) {
+        showErrorState('Loading is taking too long. Please refresh the page or try again.');
+      }
+    }, 20000);
+
+    console.log('[loadFavorites] Querying favorites for userId:', currentUser.uid);
     const snapshot = await withTimeout(
       db.collection('users')
         .doc(currentUser.uid)
@@ -45,6 +76,13 @@ async function loadFavorites() {
         .get()
     );
 
+    // Clear fallback timer on success
+    if (fallbackTimer) {
+      clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+    }
+
+    console.log('[loadFavorites] Snapshot size:', snapshot.size);
     const favoriteIds = snapshot.docs.map(doc => doc.data().cafeId);
 
     if (!favoriteIds.length) {
@@ -64,8 +102,16 @@ async function loadFavorites() {
     renderFavorites();
 
   } catch (err) {
-    console.error('Error loading favorites:', err);
-    showEmptyState();
+    console.error('[loadFavorites] Error:', err);
+    if (fallbackTimer) {
+      clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+    }
+    if (err.message === 'Query timeout after 15 seconds') {
+      showErrorState('Request timed out after 15 seconds. Please check your connection and try again.');
+    } else {
+      showErrorState('Failed to load favorites: ' + err.message);
+    }
   }
 }
 
@@ -128,6 +174,25 @@ async function removeFavorite(cafeId, event) {
 
 // Show empty state
 function showEmptyState() {
-  document.getElementById('favorites-grid').innerHTML = '';
-  document.getElementById('empty-state').style.display = 'block';
+  const grid = document.getElementById('favorites-grid');
+  const empty = document.getElementById('empty-state');
+  if (grid) grid.innerHTML = '';
+  if (empty) empty.style.display = 'block';
+}
+
+// Show error state
+function showErrorState(message) {
+  const grid = document.getElementById('favorites-grid');
+  const empty = document.getElementById('empty-state');
+  if (grid) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <div class="cup">⚠️</div>
+        <h3>Unable to load favorites</h3>
+        <p>${message}</p>
+        <button class="brew-btn" onclick="loadFavorites()">Retry</button>
+      </div>
+    `;
+  }
+  if (empty) empty.style.display = 'none';
 }
