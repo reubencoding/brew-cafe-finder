@@ -7,26 +7,26 @@
 
 ### JavaScript Stability
 
-- [ ] **JS-01**: Eliminate duplicate variable declaration errors (`currentUser` redeclaration)
-- [ ] **JS-02**: Fix `Cannot set properties of null` error on non-auth pages (auth.js)
-- [ ] **JS-03**: Ensure no console errors on any page when running on local server
-- [ ] **JS-04**: Remove stray blank component with close button from index.html
+- [x] **JS-01**: Eliminate duplicate variable declaration errors (`currentUser` redeclaration)
+- [x] **JS-02**: Fix `Cannot set properties of null` error on non-auth pages (auth.js)
+- [x] **JS-03**: Ensure no console errors on any page when running on local server
+- [x] **JS-04**: Remove stray blank component with close button from index.html
 
 ### Bookings System
 
-- [ ] **BOOK-01**: Bookings page loads successfully (no infinite loading)
-- [ ] **BOOK-02**: Bookings display correctly with date, time, café name, and guest count
-- [ ] **BOOK-03**: Cancellation of bookings works (status changes to 'cancelled')
-- [ ] **BOOK-04**: Creating a new booking from café detail page succeeds
-- [ ] **BOOK-05**: Firestore query correctly filters bookings by logged-in user's `userId`
+- [x] **BOOK-01**: Bookings page loads successfully (no infinite loading)
+- [x] **BOOK-02**: Bookings display correctly with date, time, café name, and guest count
+- [x] **BOOK-03**: Cancellation of bookings works (status changes to 'cancelled')
+- [x] **BOOK-04**: Creating a new booking from café detail page succeeds
+- [x] **BOOK-05**: Firestore query correctly filters bookings by logged-in user's `userId`
 
 ### Reviews Display
 
-- [ ] **REV-01**: Reviews load correctly when viewing a café detail page
-- [ ] **REV-02**: Reviews display with proper formatting: author, date, star rating, text
-- [ ] **REV-03**: Review count on café card updates when new reviews are added
-- [ ] **REV-04**: Query filters reviews by exact `cafeId` match (case-sensitive, exact string)
-- [ ] **REV-05**: Empty state shows "No reviews yet" only when café truly has no reviews
+- [x] **REV-01**: Reviews load correctly when viewing a café detail page
+- [x] **REV-02**: Reviews display with proper formatting: author, date, star rating, text
+- [x] **REV-03**: Review count on café card updates when new reviews are added
+- [x] **REV-04**: Query filters reviews by exact `cafeId` match (case-sensitive, exact string)
+- [x] **REV-05**: Empty state shows "No reviews yet" only when café truly has no reviews
 
 ### General
 
@@ -53,24 +53,24 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| JS-01 | Phase 1 | Pending |
-| JS-02 | Phase 1 | Pending |
-| JS-03 | Phase 1 | Pending |
-| JS-04 | Phase 1 | Pending |
-| BOOK-01 | Phase 2 | Pending |
-| BOOK-02 | Phase 2 | Pending |
-| BOOK-03 | Phase 2 | Pending |
-| BOOK-04 | Phase 2 | Pending |
-| BOOK-05 | Phase 2 | Pending |
-| REV-01 | Phase 3 | Pending |
-| REV-02 | Phase 3 | Pending |
-| REV-03 | Phase 3 | Pending |
-| REV-04 | Phase 3 | Pending |
-| REV-05 | Phase 3 | Pending |
-| GEN-01 | Phase 4 | Complete |
-| GEN-02 | Phase 4 | Complete |
-| GEN-03 | Phase 4 | Complete |
-| GEN-04 | Phase 4 | Complete |
+| JS-01 | 1 | ✓ Complete |
+| JS-02 | 1 | ✓ Complete |
+| JS-03 | 1 | ✓ Complete |
+| JS-04 | 1 | ✓ Complete |
+| BOOK-01 | 2 | ✓ Complete |
+| BOOK-02 | 2 | ✓ Complete |
+| BOOK-03 | 2 | ✓ Complete |
+| BOOK-04 | 2 | ✓ Complete |
+| BOOK-05 | 2 | ✓ Complete |
+| REV-01 | 3 | ✓ Complete |
+| REV-02 | 3 | ✓ Complete |
+| REV-03 | 3 | ✓ Complete |
+| REV-04 | 3 | ✓ Complete |
+| REV-05 | 3 | ✓ Complete |
+| GEN-01 | 4 | ✓ Complete |
+| GEN-02 | 4 | ✓ Complete |
+| GEN-03 | 4 | ✓ Complete |
+| GEN-04 | 4 | ✓ Complete |
 
 ---
 
