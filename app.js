@@ -171,17 +171,7 @@ function closeModalBtn() {
   if (modal) modal.classList.remove('open');
 }
 
-// Toast (disabled - component removed)
-function showToast(msg) {
-  // No-op; toast removed
-}
-
-// Sign out
-function signOut() {
-  auth.signOut().then(() => {
-    window.location.href = 'auth.html';
-  });
-}
+// Sign out is provided by auth.js
 
 // Keyboard shortcuts
 document.addEventListener('keydown', e => {

@@ -1,6 +1,6 @@
 // Bookings Page Logic
 
-let currentUser = null;
+let currentUser = null; // Will be set by auth state listener
 let currentTab = 'upcoming';
 let bookings = [];
 let bookingToCancel = null;
@@ -13,24 +13,37 @@ document.getElementById('cancel-modal')?.classList.remove('open');
 auth.onAuthStateChanged((user) => {
   if (user) {
     currentUser = user;
-    document.getElementById('user-display').textContent = user.displayName || user.email.split('@')[0];
+    const userDisplay = document.getElementById('user-display');
+    if (userDisplay) {
+      userDisplay.textContent = user.displayName || user.email.split('@')[0];
+    }
     loadBookings();
   } else {
-    document.getElementById('user-display').textContent = 'Guest';
-    document.getElementById('bookings-container').innerHTML = `
-      <div class="empty-state">
-        <div class="cup">🔒</div>
-        <h3>Please sign in</h3>
-        <p>Sign in to view your bookings</p>
-        <a href="auth.html" class="brew-btn">Sign In</a>
-      </div>
-    `;
+    const userDisplay = document.getElementById('user-display');
+    if (userDisplay) {
+      userDisplay.textContent = 'Guest';
+    }
+    const container = document.getElementById('bookings-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="cup">🔒</div>
+          <h3>Please sign in</h3>
+          <p>Sign in to view your bookings</p>
+          <a href="auth.html" class="brew-btn">Sign In</a>
+        </div>
+      `;
+    }
   }
 });
 
 // Load bookings
 function showErrorState(message) {
   const container = document.getElementById('bookings-container');
+  if (!container) {
+    console.error('bookings-container not found');
+    return;
+  }
   container.innerHTML = `
     <div class="empty-state">
       <div class="cup">⚠️</div>
@@ -42,22 +55,53 @@ function showErrorState(message) {
 }
 
 async function loadBookings() {
+  console.log('[loadBookings] called');
   // Clear any existing fallback timer
   if (fallbackTimer) {
     clearTimeout(fallbackTimer);
     fallbackTimer = null;
   }
 
-  if (!currentUser) return;
+  // Auth check - wait for auth state to be ready
+  if (!currentUser || !currentUser.uid) {
+    console.warn('[loadBookings] No currentUser — showing sign-in prompt');
+    const container = document.getElementById('bookings-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="cup">🔒</div>
+          <h3>Please sign in</h3>
+          <p>Sign in to view your bookings</p>
+          <a href="auth.html" class="brew-btn">Sign In</a>
+        </div>
+      `;
+    }
+    return;
+  }
 
   // Check Firebase availability
   if (typeof db === 'undefined' || db === null) {
+    console.error('[loadBookings] Firebase db not available');
     showErrorState('Firebase is not available. Please check your connection.');
     return;
   }
 
+  // Set global fallback timer - if loading persists after 20 seconds, show error
+  fallbackTimer = setTimeout(() => {
+    const container = document.getElementById('bookings-container');
+    const loadingState = container?.querySelector('.loading-state');
+    if (loadingState) {
+      showErrorState('Loading is taking too long. Please refresh the page or try again.');
+    }
+  }, 20000);
+
   // Show loading state
   const container = document.getElementById('bookings-container');
+  if (!container) {
+    console.error('[loadBookings] bookings-container not found');
+    if (fallbackTimer) clearTimeout(fallbackTimer);
+    return;
+  }
   container.innerHTML = `
     <div class="loading-state">
       <div class="spinner"></div>
@@ -66,6 +110,7 @@ async function loadBookings() {
   `;
 
   try {
+    console.log('[loadBookings] Querying bookings for userId:', currentUser.uid);
     // Wrap query in 15-second timeout
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('QUERY_TIMEOUT')), 15000)
@@ -75,6 +120,13 @@ async function loadBookings() {
       .get();
 
     const snapshot = await Promise.race([queryPromise, timeoutPromise]);
+    console.log('[loadBookings] Query returned', snapshot.docs.length, 'bookings');
+
+    // Clear fallback timer on success
+    if (fallbackTimer) {
+      clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+    }
 
     bookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
@@ -85,9 +137,15 @@ async function loadBookings() {
       return bTime - aTime;
     });
 
+    console.log('[loadBookings] rendering bookings');
     filterAndRenderBookings();
   } catch (err) {
-    console.error('Error loading bookings:', err);
+    console.error('[loadBookings] Error:', err);
+    // Clear fallback timer on error
+    if (fallbackTimer) {
+      clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+    }
     if (err.message === 'QUERY_TIMEOUT') {
       showErrorState('Request timed out after 15 seconds. Please check your connection and try again.');
     } else {
@@ -143,21 +201,38 @@ function renderBookings(bookingsList) {
   const container = document.getElementById('bookings-container');
   const emptyState = document.getElementById('empty-state');
 
-  if (!bookingsList.length) {
-    container.innerHTML = '';
-    emptyState.style.display = 'block';
+  if (!container) {
+    console.error('renderBookings: bookings-container not found');
     return;
   }
 
-  emptyState.style.display = 'none';
+  if (!bookingsList.length) {
+    container.innerHTML = '';
+    if (emptyState) emptyState.style.display = 'block';
+    return;
+  }
+
+  if (emptyState) emptyState.style.display = 'none';
 
   container.innerHTML = bookingsList.map(booking => {
-    const date = new Date(booking.date);
-    const dateStr = date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
-    });
+    let dateStr = 'TBD';
+    if (booking.date) {
+      try {
+        const date = new Date(booking.date);
+        // Check if date is valid
+        if (!isNaN(date.getTime())) {
+          dateStr = date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric'
+          });
+        } else {
+          dateStr = String(booking.date);
+        }
+      } catch (e) {
+        dateStr = String(booking.date);
+      }
+    }
 
     const statusClass = {
       'confirmed': 'confirmed',
@@ -177,7 +252,7 @@ function renderBookings(bookingsList) {
           <h4>${booking.cafeName}</h4>
           <p>${dateStr} at ${booking.time}</p>
           <div class="booking-meta">
-            <span>${booking.guests} Guest${booking.guests > 1 ? 's' : ''}</span>
+            <span>${booking.guests || 0} Guest${(booking.guests || 0) > 1 ? 's' : ''}</span>
             ${booking.notes ? '<span>Has notes</span>' : ''}
           </div>
         </div>
@@ -219,31 +294,20 @@ async function confirmCancel() {
       cancelledAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
+    // Update local state for immediate UI feedback
+    const booking = bookings.find(b => b.id === bookingToCancel);
+    if (booking) {
+      booking.status = 'cancelled';
+    }
+
     closeCancelModalBtn();
-    // Refresh bookings list
-    loadBookings();
+    // Re-render immediately with updated local state
+    filterAndRenderBookings();
+
+    // Optional: Reload from server after a short delay to ensure sync
+    setTimeout(loadBookings, 1000);
   } catch (err) {
     alert('Error: ' + err.message);
   }
 }
 
-// Toast (disabled - component removed)
-function showToast(msg) {
-  // No-op; toast removed
-}
-
-// Sign out
-function signOut() {
-  auth.signOut().then(() => {
-    window.location.href = 'auth.html';
-  });
-}
-
-// Global fallback timer: if loading persists after 20 seconds, show error
-setTimeout(() => {
-  const container = document.getElementById('bookings-container');
-  const loadingState = container?.querySelector('.loading-state');
-  if (loadingState) {
-    showErrorState('Loading is taking too long. Please refresh the page or try again.');
-  }
-}, 20000);

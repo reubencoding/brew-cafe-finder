@@ -34,6 +34,8 @@ function switchMode(mode) {
 // Render form fields
 function renderFields() {
   const container = document.getElementById('fields');
+  if (!container) return; // Safe on non-auth pages
+
   if (currentMode === 'signup') {
     container.innerHTML = `
       <div class="field-wrap">
@@ -79,8 +81,10 @@ function setErr(id, msg) {
 
 // Handle email/password auth
 document.addEventListener('DOMContentLoaded', () => {
+  if (!document.getElementById('fields')) return; // Only run on auth.html
   renderFields();
-  document.getElementById('auth-submit').addEventListener('click', handleAuth);
+  const btn = document.getElementById('auth-submit');
+  if (btn) btn.addEventListener('click', handleAuth);
 });
 
 function handleAuth() {
