@@ -72,7 +72,10 @@ Plans:
 4. Query filters reviews correctly: only reviews matching exact `cafeId` are shown
 5. Empty state "No reviews yet" appears ONLY for cafés with zero reviews in Firestore
 
-**Plans:** 1 plan (PLAN.md)
+**Plans:** 1 plan
+
+Plans:
+- [ ] phase-3-01-PLAN.md — Fix reviews display with diagnostics, proper error states, and count updates.
 
 ---
 
