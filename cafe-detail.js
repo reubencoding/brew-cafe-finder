@@ -5,6 +5,16 @@ let currentDocId = null;
 let isFavorite = false;
 let currentUser = null;
 
+// Helper: Wrap promises with 15-second timeout
+function withTimeout(promise, timeout = 15000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Query timeout after 15 seconds')), timeout)
+    )
+  ]);
+}
+
 // Initialize
 auth.onAuthStateChanged((user) => {
   currentUser = user;
@@ -197,11 +207,13 @@ async function checkFavorite() {
   if (!currentUser || !currentDocId) return;
 
   try {
-    const doc = await db.collection('users')
-      .doc(currentUser.uid)
-      .collection('favorites')
-      .doc(currentDocId)
-      .get();
+    const doc = await withTimeout(
+      db.collection('users')
+        .doc(currentUser.uid)
+        .collection('favorites')
+        .doc(currentDocId)
+        .get()
+    );
 
     isFavorite = doc.exists;
     updateFavoriteButton();
@@ -289,7 +301,36 @@ async function submitBooking(e) {
   const guests = document.getElementById('booking-guests').value;
   const notes = document.getElementById('booking-notes').value;
 
+  // Validation
+  if (!date || !time || !guests) {
+    alert('Please select a valid date, time, and guest count');
+    return;
+  }
+
+  const guestsNum = parseInt(guests, 10);
+  if (isNaN(guestsNum) || guestsNum < 1) {
+    alert('Guest count must be at least 1');
+    return;
+  }
+
+  // Check date is in the future (today or later)
+  const selectedDate = new Date(date);
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  if (selectedDate < today) {
+    alert('Booking date cannot be in the past');
+    return;
+  }
+
+  // Ensure currentUser exists
+  if (!currentUser || !currentUser.uid) {
+    showToast('Please sign in to book a table');
+    setTimeout(() => window.location.href = 'auth.html', 1500);
+    return;
+  }
+
   try {
+    console.log('[submitBooking] Creating booking for cafe:', currentDocId, 'date:', date, 'time:', time);
     await db.collection('bookings').add({
       userId: currentUser.uid,
       userName: currentUser.displayName || currentUser.email.split('@')[0],
@@ -299,17 +340,21 @@ async function submitBooking(e) {
       cafeColor: currentCafe.color,
       date: date,
       time: time,
-      guests: parseInt(guests),
-      notes: notes,
+      guests: guestsNum,
+      notes: notes || '',
       status: 'confirmed',
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     closeBookingModalBtn();
+    // Reset form
+    document.getElementById('booking-form')?.reset();
+    console.log('[submitBooking] Booking created successfully');
     // Redirect to bookings page to view the booking
     window.location.href = 'bookings.html';
   } catch (err) {
-    alert('Error: ' + err.message);
+    console.error('[submitBooking] Error:', err);
+    alert('Error creating booking: ' + err.message);
   }
 }
 
@@ -411,22 +456,39 @@ async function submitReview(e) {
 
 // Load reviews
 async function loadReviews() {
-  if (!currentDocId) return;
+  console.log('[loadReviews] called, currentDocId:', currentDocId);
+
+  if (!currentDocId) {
+    console.warn('[loadReviews] No currentDocId — aborting');
+    return;
+  }
+
+  if (typeof db === 'undefined' || db === null) {
+    console.error('[loadReviews] Firebase db not available');
+    const reviewsList = document.getElementById('reviews-list');
+    if (reviewsList) {
+      reviewsList.innerHTML = '<p class="review-text error">Unable to load reviews. Firebase not initialized.</p>';
+    }
+    return;
+  }
 
   try {
+    console.log('[loadReviews] Querying reviews for cafeId:', currentDocId);
     const snapshot = await db.collection('reviews')
       .where('cafeId', '==', currentDocId)
       .orderBy('createdAt', 'desc')
       .limit(5)
       .get();
 
+    console.log('[loadReviews] Snapshot size:', snapshot.size, 'docs:', snapshot.docs.map(d => d.id));
+
     const reviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     renderReviews(reviews);
   } catch (err) {
-    console.error('Error loading reviews:', err);
+    console.error('[loadReviews] Error:', err);
     const reviewsList = document.getElementById('reviews-list');
     if (reviewsList) {
-      reviewsList.innerHTML = '<p class="review-text">No reviews yet. Be the first to review!</p>';
+      reviewsList.innerHTML = `<p class="review-text error">Unable to load reviews. Error: ${err.message}. Check console for details.</p>`;
     }
   }
 }
@@ -442,15 +504,22 @@ function renderReviews(reviews) {
   }
 
   container.innerHTML = reviews.map(r => {
-    const date = r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : 'Recently';
+    // Defensive defaults
+    const userName = r.userName || 'Anonymous';
+    const rating = Math.min(5, Math.max(0, r.rating || 0));
+    const text = r.text || '';
+    const date = r.createdAt?.toDate
+      ? r.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : 'Recently';
+
     return `
       <div class="review-item">
         <div class="review-header">
-          <span class="review-author">${r.userName}</span>
+          <span class="review-author">${userName}</span>
           <span class="review-date">${date}</span>
         </div>
-        <div class="review-rating">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
-        <p class="review-text">${r.text}</p>
+        <div class="review-rating">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+        <p class="review-text">${text}</p>
       </div>
     `;
   }).join('');

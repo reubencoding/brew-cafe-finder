@@ -8,6 +8,16 @@ let currentSort = 'newest';
 let lastDoc = null;
 const REVIEWS_PER_PAGE = 9;
 
+// Helper: Wrap promises with 15-second timeout
+function withTimeout(promise, timeout = 15000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Query timeout after 15 seconds')), timeout)
+    )
+  ]);
+}
+
 // Initialize
 auth.onAuthStateChanged((user) => {
   currentUser = user;
@@ -42,7 +52,7 @@ async function loadReviews(loadMore = false) {
       query = query.startAfter(lastDoc);
     }
 
-    const snapshot = await query.get();
+    const snapshot = await withTimeout(query.get());
 
     if (!loadMore) {
       reviews = [];
@@ -142,7 +152,7 @@ function renderReviews(reviewsList) {
 async function updateStats() {
   try {
     // Total reviews
-    const totalSnapshot = await db.collection('reviews').get();
+    const totalSnapshot = await withTimeout(db.collection('reviews').get());
     document.getElementById('total-reviews').textContent = totalSnapshot.size;
 
     // Average rating

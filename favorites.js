@@ -1,7 +1,17 @@
 // Favorites Page Logic
 
-let currentUser = null;
+// Auth state provided by auth.js
 let favorites = [];
+
+// Helper: Wrap promises with 15-second timeout
+function withTimeout(promise, timeout = 15000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Query timeout after 15 seconds')), timeout)
+    )
+  ]);
+}
 
 // Initialize
 auth.onAuthStateChanged((user) => {
@@ -27,11 +37,13 @@ async function loadFavorites() {
   if (!currentUser) return;
 
   try {
-    const snapshot = await db.collection('users')
-      .doc(currentUser.uid)
-      .collection('favorites')
-      .orderBy('addedAt', 'desc')
-      .get();
+    const snapshot = await withTimeout(
+      db.collection('users')
+        .doc(currentUser.uid)
+        .collection('favorites')
+        .orderBy('addedAt', 'desc')
+        .get()
+    );
 
     const favoriteIds = snapshot.docs.map(doc => doc.data().cafeId);
 
@@ -118,16 +130,4 @@ async function removeFavorite(cafeId, event) {
 function showEmptyState() {
   document.getElementById('favorites-grid').innerHTML = '';
   document.getElementById('empty-state').style.display = 'block';
-}
-
-// Toast (disabled - component removed)
-function showToast(msg) {
-  // No-op; toast removed
-}
-
-// Sign out
-function signOut() {
-  auth.signOut().then(() => {
-    window.location.href = 'auth.html';
-  });
 }
