@@ -1,20 +1,20 @@
-# ☕ CafeFindr (formerly BREW) — Chennai's Café Guide
+# ☕ BREW — Chennai's Spot Guide
 
 A full-stack café discovery and booking web application for Chennai, built with **vanilla HTML/CSS/JS** and **Firebase** (free tier).
 
-**Repository**: https://github.com/reubencoding/CafeFindr
+**Repository**: https://github.com/reubencoding/Brew-cafe-finder
 
 ---
 
 ## 🚀 Features
 
 ### Core Features
-- **Café Discovery** — Browse 19+ handpicked cafés across Chennai
+- **Spot Discovery** — Browse 19+ handpicked spots across Chennai
 - **Search & Filter** — Search by name, area, or vibe; filter by neighborhood
-- **Detailed Pages** — Each café has its own page with menu, reviews, and booking
-- **Favorites** — Save cafés to your personal list
-- **Table Booking** — Book tables at your favorite cafés
-- **Reviews** — Read and write reviews for cafés
+- **Detailed Pages** — Each spot has its own page with menu, reviews, and booking
+- **Favorites** — Save spots to your personal list
+- **Table Booking** — Book tables at your favorite spots
+- **Reviews** — Read and write reviews for spots
 - **Responsive Design** — Works on desktop, tablet, and mobile
 
 ### Backend Features (Firebase)
@@ -29,8 +29,9 @@ A full-stack café discovery and booking web application for Chennai, built with
 
 ```
 cafe/
-├── auth.html           # Login/signup page (default landing page)
-├── index.html          # Main discovery page (protected, redirects to auth.html if not signed in)
+├── auth.html           # Login/signup page
+├── index.html          # Landing page with full-screen image expansion
+├── discover.html       # Main discovery page (protected, redirects to auth.html if not signed in)
 ├── cafe-detail.html    # Individual café page (public)
 ├── bookings.html       # My bookings page (protected)
 ├── favorites.html      # My favorites page (protected)

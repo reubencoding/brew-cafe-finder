@@ -8,7 +8,7 @@ auth.onAuthStateChanged((user) => {
     currentUser = user;
     // If on auth page, redirect to index
     if (window.location.pathname.includes('auth.html')) {
-      window.location.href = 'index.html';
+      window.location.href = 'discover.html';
     }
   } else {
     currentUser = null;
@@ -123,7 +123,7 @@ function handleAuth() {
           });
         })
         .then(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'discover.html';
         })
         .catch((err) => {
           alert('Error: ' + err.message);
@@ -139,7 +139,7 @@ function handleAuth() {
 
       auth.signInWithEmailAndPassword(email, pass)
         .then(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'discover.html';
         })
         .catch((err) => {
           alert('Error: ' + err.message);
@@ -170,7 +170,7 @@ function googleSignIn() {
         });
     })
     .then(() => {
-      window.location.href = 'index.html';
+      window.location.href = 'discover.html';
     })
     .catch((err) => {
       alert('Error: ' + err.message);

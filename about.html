@@ -3,34 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Favorites — BREW</title>
+  <title>About Us — BREW</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div id="bg-deco"></div>
 
 <!-- Header -->
 <header>
-  <a href="discover.html" class="header-logo">
-    <svg class="icon-coffee" style="width:26px;height:26px" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+  <a href="index.html" class="header-logo">
+    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M2 21v-2.258l.316-2.632C3.604 15.518 4 14.392 4 13.186 4 7.365 8.363 3 13.318 3c4.562 0 8.249 3.898 8.249 8.724 0 4.297-3.422 7.802-8.001 8.462v2.112h-1.56V21H2zm2-4h14.959l.881-7.375C18.258 9.461 18 8.653 18 7.746 18 4.12 14.366 1 10.097 1S2.196 4.12 2 7.746c0 .908.258 1.715.719 2.38L4 17z"/>
     </svg>
     <div>
       <h1>BREW</h1>
-      <span>BREW</span>
+      <span>CHENNAI CAFÉS</span>
     </div>
   </a>
   <nav class="header-nav">
     <a href="index.html" class="nav-link">Home</a>
     <a href="discover.html" class="nav-link">Discover</a>
-    <a href="reviews.html" class="nav-link">Reviews</a>
-    <a href="bookings.html" class="nav-link">My Bookings</a>
-    <a href="favorites.html" class="nav-link active">Favorites</a>
+    <a href="about.html" class="nav-link active">About Us</a>
+    <a href="contact.html" class="nav-link">Contact</a>
   </nav>
   <div class="header-right">
     <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
@@ -38,29 +33,34 @@
   </div>
 </header>
 
-<!-- Favorites Content -->
-<div class="page-container">
+<main class="page-container">
   <div class="page-header">
-    <h2>My Favorites</h2>
-    <p>Your saved spots for quick access</p>
+    <h2>About BREW</h2>
+    <p>Discover the story behind Chennai's premier spot guide</p>
   </div>
 
-  <!-- Favorites Grid -->
-  <div class="grid" id="favorites-grid">
-    <div class="loading-state">
-      <div class="spinner"></div>
-      <p>Loading your favorites...</p>
+  <section class="about-section">
+    <div class="about-content">
+      <h3>Our Mission</h3>
+      <p>BREW is dedicated to helping coffee lovers and adventurers discover the best spots across Chennai. We believe that every cup tells a story, and every place has a unique vibe worth experiencing.</p>
     </div>
-  </div>
 
-  <!-- Empty State -->
-  <div class="empty-state" id="empty-state" style="display:none;">
-    <div class="cup">🤍</div>
-    <h3>No favorites yet</h3>
-    <p>Save your favorite spots to find them quickly</p>
-    <a href="discover.html" class="brew-btn">Discover Spots</a>
-  </div>
-</div>
+    <div class="about-content">
+      <h3>What We Do</h3>
+      <p>We curate handpicked locations—from cozy corners and garden retreats to specialty roasteries and work-friendly spaces. Each spot is carefully reviewed and updated to ensure you have the most authentic experience.</p>
+    </div>
+
+    <div class="about-content">
+      <h3>Community Driven</h3>
+      <p>BREW thrives on community contributions. Users can write reviews, save favorites, and book tables directly through the platform. Together, we're building a living guide that evolves with Chennai's vibrant scene.</p>
+    </div>
+
+    <div class="about-content">
+      <h3>Technology</h3>
+      <p>Built with vanilla HTML, CSS, and JavaScript, powered by Firebase for seamless user authentication, real-time data, and offline support. No frameworks, just clean code and great coffee.</p>
+    </div>
+  </section>
+</main>
 
 <footer class="home-footer">
   <div class="footer-content">
@@ -81,7 +81,5 @@
 
 <script src="firebase-compat-config.js"></script>
 <script src="auth.js"></script>
-<script src="cafe-data.js"></script>
-<script src="favorites.js"></script>
 </body>
 </html>

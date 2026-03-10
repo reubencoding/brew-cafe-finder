@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BREW — Chennai's Café Guide</title>
+  <title>BREW — Discover Chennai's Best Spots</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- Firebase SDK (Compat version for easier integration) -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div id="bg-deco"></div>
@@ -22,60 +18,174 @@
     </svg>
     <div>
       <h1>BREW</h1>
-      <span>CHENNAI CAFÉS</span>
+      <span>BREW</span>
     </div>
   </a>
   <nav class="header-nav">
-    <a href="index.html" class="nav-link active">Discover</a>
-    <a href="reviews.html" class="nav-link">Reviews</a>
-    <a href="bookings.html" class="nav-link">My Bookings</a>
-    <a href="favorites.html" class="nav-link">Favorites</a>
+    <a href="discover.html" class="nav-link">Start Exploring</a>
   </nav>
-  <div class="header-right">
-    <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
-    <button class="signout-btn" onclick="signOut()">SIGN OUT</button>
-  </div>
 </header>
 
-<!-- Hero -->
-<div class="hero">
-  <p class="eyebrow">EXPLORE</p>
-  <h2>Chennai's Finest <span>Coffee Haunts</span></h2>
-  <p class="hero-sub">Discover handpicked cafés, from serene garden retreats to specialty roasteries</p>
+<main>
+  <!-- Hero Section -->
+  <section id="hero" class="home-hero">
+    <p class="eyebrow">WELCOME TO BREW</p>
+    <h1>Discover Chennai's<br><span>Finest Coffee Haunts</span></h1>
+    <p class="home-hero-sub">
+      Your personal guide to the city's most beloved cafés.
+      Browse handpicked spots, read authentic reviews, and book your perfect coffee experience.
+    </p>
+  </section>
 
-  <!-- Search Container -->
-  <div class="search-container">
-    <label for="search-input" class="sr-only">Search cafés, areas, and vibes</label>
-    <input class="search-box" type="text" placeholder="🔍  Search cafés, areas, vibes..." id="search-input" oninput="filterCafes()" />
+  <!-- Full-Screen Image Expansion Section -->
+  <section id="featured-expansion" class="featured-expansion-section">
+    <div class="expansion-container">
+      <div class="expansion-pinned">
+        <div class="featured-image-wrapper">
+          <img src="images/cafe_001.jpg" alt="Featured Café" class="featured-image" />
+        </div>
+        <div class="featured-caption">
+          <h2>Experience the Magic</h2>
+          <p>Chennai's cafés tell a story—one cup at a time</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="home-features">
+    <h2>Why Choose BREW?</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Curated Collection</h3>
+        <p>Handpicked spots across Chennai, from serene garden retreats to specialty roasteries.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⭐</div>
+        <h3>Real Reviews</h3>
+        <p>Authentic ratings and reviews from real coffee lovers like you.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Easy Booking</h3>
+        <p>Reserve your table directly through the app—no phone calls needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">❤️</div>
+        <h3>Personalize</h3>
+        <p>Save favorites and get recommendations based on your taste.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Horizontal Gallery Section (Sticky) -->
+  <section id="gallery" class="home-gallery-section">
+    <div class="gallery-container">
+      <!-- Pinned header -->
+      <div class="gallery-pinned">
+        <h2>Explore by Vibe</h2>
+        <p>Scroll horizontally to discover different café atmospheres</p>
+      </div>
+      <!-- Horizontal scrolling track -->
+      <div class="gallery-wrapper">
+        <div class="gallery-track">
+          <div class="gallery-card" style="--card-index: 0">
+            <div class="gallery-image">☕</div>
+            <h3>Cozy Corners</h3>
+            <p>Quiet nooks perfect for reading and reflection</p>
+          </div>
+          <div class="gallery-card" style="--card-index: 1">
+            <div class="gallery-image">🌿</div>
+            <h3>Garden Cafés</h3>
+            <p>Lush greenery and outdoor seating</p>
+          </div>
+          <div class="gallery-card" style="--card-index: 2">
+            <div class="gallery-image">🎨</div>
+            <h3>Artistic Spaces</h3>
+            <p>Galleries and creative installations</p>
+          </div>
+          <div class="gallery-card" style="--card-index: 3">
+            <div class="gallery-image">🏙️</div>
+            <h3>Rooftop Views</h3>
+            <p>Skyline panoramas with fresh air</p>
+          </div>
+          <div class="gallery-card" style="--card-index: 4">
+            <div class="gallery-image">☕</div>
+            <h3>Specialty Roasters</h3>
+            <p>Single-origin and craft brews</p>
+          </div>
+          <div class="gallery-card" style="--card-index: 5">
+            <div class="gallery-image">💼</div>
+            <h3>Work-Friendly</h3>
+            <p>WiFi, power outlets, and spacious tables</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="home-steps">
+    <h2>How It Works</h2>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Browse</h3>
+          <p>Explore our curated list of cafés filtered by area, vibe, and price.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Read Reviews</h3>
+          <p>Check out detailed reviews, photos, and ratings from the community.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Book</h3>
+          <p>Reserve your table with a few clicks—receive instant confirmation.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Enjoy</h3>
+          <p>Show up, soak in the ambiance, and savor your coffee moment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section id="cta" class="home-cta">
+    <h2>Ready to Start Your Coffee Journey?</h2>
+    <p>Join thousands of coffee lovers discovering Chennai's best cafés.</p>
+    <a href="discover.html" class="cta-button">Start Exploring →</a>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="home-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <h3>BREW</h3>
+      <p>Chennai's premier spot guide.</p>
+    </div>
+    <div class="footer-links">
+      <a href="discover.html">Explore Spots</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </div>
   </div>
-</div>
-
-<!-- Controls (Filters only) -->
-<div class="controls">
-  <div class="filter-row">
-    <div class="area-pills" id="area-pills"></div>
-    <select class="sort-select" id="sort-select" onchange="sortCafes()">
-      <option value="rating">Sort by Rating</option>
-      <option value="reviews">Most Reviewed</option>
-      <option value="price-low">Price: Low to High</option>
-      <option value="price-high">Price: High to Low</option>
-      <option value="name">Name A-Z</option>
-    </select>
+  <div class="footer-bottom">
+    <p>&copy; 2025 BREW. Crafted with ☕ in Chennai.</p>
   </div>
-  <p class="result-count" id="result-count"></p>
-</div>
+</footer>
 
-<!-- Grid -->
-<div class="grid" id="cafe-grid">
-  <div class="loading-state">
-    <div class="spinner"></div>
-    <p>Loading cafés...</p>
-  </div>
-</div>
-
-<script src="firebase-compat-config.js"></script>
-<script src="auth.js"></script>
-<script src="cafe-data.js"></script>
-<script src="app.js"></script>
+<script src="home.js"></script>
 </body>
 </html>

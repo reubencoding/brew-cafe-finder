@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — BREW</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="bg-deco"></div>
+
+<!-- Header -->
+<header>
+  <a href="index.html" class="header-logo">
+    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M2 21v-2.258l.316-2.632C3.604 15.518 4 14.392 4 13.186 4 7.365 8.363 3 13.318 3c4.562 0 8.249 3.898 8.249 8.724 0 4.297-3.422 7.802-8.001 8.462v2.112h-1.56V21H2zm2-4h14.959l.881-7.375C18.258 9.461 18 8.653 18 7.746 18 4.12 14.366 1 10.097 1S2.196 4.12 2 7.746c0 .908.258 1.715.719 2.38L4 17z"/>
+    </svg>
+    <div>
+      <h1>BREW</h1>
+      <span>CHENNAI CAFÉS</span>
+    </div>
+  </a>
+  <nav class="header-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="discover.html" class="nav-link">Discover</a>
+    <a href="about.html" class="nav-link">About Us</a>
+    <a href="contact.html" class="nav-link active">Contact</a>
+  </nav>
+  <div class="header-right">
+    <p class="welcome-txt">Hi, <strong id="user-display">Guest</strong></p>
+    <button class="signout-btn" onclick="signOut()">SIGN OUT</button>
+  </div>
+</header>
+
+<main class="page-container">
+  <div class="page-header">
+    <h2>Get in Touch</h2>
+    <p>We'd love to hear from you</p>
+  </div>
+
+  <section class="contact-section">
+    <div class="contact-info">
+      <div class="contact-item">
+        <h3>📧 Email</h3>
+        <p><a href="mailto:vishalreubenb@gmail.com">vishalreubenb@gmail.com</a></p>
+      </div>
+
+      <div class="contact-item">
+        <h3>📞 Phone</h3>
+        <p><a href="tel:+917550061088">+91 7550061088</a></p>
+      </div>
+
+      <div class="contact-item">
+        <h3>📍 Location</h3>
+        <p>Chennai, Tamil Nadu, India</p>
+      </div>
+
+      <div class="contact-item">
+        <h3>💬 Social</h3>
+        <p>Follow us for updates</p>
+      </div>
+    </div>
+
+    <div class="contact-form-container">
+      <h3>Send us a Message</h3>
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you for your message! We\'ll get back to you soon.');">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Your name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="your.email@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
+        </div>
+        <button type="submit" class="brew-btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="home-footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <h3>BREW</h3>
+      <p>Chennai's premier spot guide.</p>
+    </div>
+    <div class="footer-links">
+      <a href="discover.html">Explore Spots</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 BREW. Crafted with ☕ in Chennai.</p>
+  </div>
+</footer>
+
+<script src="firebase-compat-config.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
